@@ -25,8 +25,10 @@ python mf.py elephant-ramhacks-$ADDRESS https://s3.amazonaws.com/elephant-ramhac
 rm -f elephant-ramhacks-$ADDRESS
 
 # get into the directory to download images from urls
-cd source; wget -i src_list ; rm -f src_list ; cd ..
-cd targets; wget -i tar_list ; rm -f tar_list ; cd ..
+# -nc: no duplicated download if the images are already in directory
+# -i: download iamges form file
+cd source; wget -nc -i src_list ; rm -f src_list ; cd ..
+cd targets; wget -nc -i tar_list ; rm -f tar_list ; cd ..
 
 # main application to execute the image comparison
 ./flannMatcher
