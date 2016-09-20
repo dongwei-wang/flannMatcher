@@ -1,5 +1,5 @@
 #include "opencv2/opencv_modules.hpp"
-#include <stdio.h>
+//#include <stdio.h>
 #include <dirent.h>
 #include <string>
 #include <iostream>
@@ -11,9 +11,8 @@
 
 #ifndef HAVE_OPENCV_NONFREE
 
-int main(int, char**)
-{
-	printf("The sample requires nonfree module that is not available in your OpenCV distribution.\n");
+int main(int, char**){
+	cout<<"The sample requires nonfree module that is not available in your OpenCV distribution."<<endl;
 	return -1;
 }
 
@@ -33,18 +32,18 @@ using namespace std;
  */
 int main()
 {
+	// get current directory
 	char cwd[MAX_DIR_LEN];
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		cout<<"Current working directory is: "<<cwd<<endl;
 	else
 	    cout<<"Get directory failed!!!"<<endl;
 
+	// get the source image files
+	// get the target image files
 	string dir_cur(cwd);
 	string dir_source = dir_cur + "/source";
 	string dir_target = dir_cur + "/targets";
-
-	// cout<<"source directory: "<<dir_source<<endl;
-	// cout<<"target directory: "<<dir_target<<endl;
 
 	string fp_source, fp_target;
 	DIR *dp_source, *dp_target;
@@ -83,7 +82,7 @@ int main()
 			//cout<<"target file is "<<fp_target<<endl;
 			Mat img_2 = imread( fp_target, CV_LOAD_IMAGE_GRAYSCALE );
 			if( !img_2.data ){
-				printf(" --(!) Error reading images \n");
+				cout<<" --(!) Error reading images "<<endl;
 				return -1;
 			}
 
@@ -106,7 +105,7 @@ int main()
 					Mat img_1 = imread( fp_source.c_str(), CV_LOAD_IMAGE_GRAYSCALE );
 
 					if( !img_1.data ){
-						printf(" --(!) Error reading images \n");
+						cout<<" --(!) Error reading images "<<endl;
 						return -1;
 					}
 
@@ -143,8 +142,8 @@ int main()
 							max_dist = dist;
 					}
 
-					// printf("-- Max dist : %f \n", max_dist );
-					// printf("-- Min dist : %f \n", min_dist );
+					cout<<"-- Max dist : "<<max_dist<<endl;
+					cout<<"-- Min dist : "<<min_dist<<endl;
 
 					//-- Draw only "good" matches (i.e. whose distance is less than 2*min_dist,
 					//-- or a small arbitary value ( 0.02 ) in the event that min_dist is very
@@ -193,7 +192,7 @@ int main()
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &end);
 	uint64_t diff = (end.tv_sec-start.tv_sec)+end.tv_nsec-start.tv_nsec;
-	printf("Elapsed process CPU time = %llu seconds \n", (long long unsigned int)diff);
+	cout<<"Elapsed process CPU time = "<< diff <<" seconds "<<endl;
 
 	closedir(dp_source);
 	closedir(dp_target);
