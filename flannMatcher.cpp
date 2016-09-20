@@ -10,12 +10,10 @@
 #define MAX_DIR_LEN 1024
 
 #ifndef HAVE_OPENCV_NONFREE
-
 int main(int, char**){
-	cout<<"The sample requires nonfree module that is not available in your OpenCV distribution."<<endl;
+	std::cout<<"The sample requires nonfree module that is not available in your OpenCV distribution."<<std::endl;
 	return -1;
 }
-
 #else
 
 # include "opencv2/core/core.hpp"
@@ -24,7 +22,6 @@ int main(int, char**){
 # include "opencv2/nonfree/features2d.hpp"
 
 using namespace cv;
-using namespace std;
 
 /**
  * @function main
@@ -35,9 +32,9 @@ int main()
 	// get current directory
 	char cwd[MAX_DIR_LEN];
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		cout<<"Current working directory is: "<<cwd<<endl;
+		std::cout<<"Current working directory is: "<<cwd<<std::endl;
 	else
-	    cout<<"Get directory failed!!!"<<endl;
+	    std::cout<<"Get directory failed!!!"<<std::endl;
 
 	// get the source image files
 	// get the target image files
@@ -51,13 +48,13 @@ int main()
 
 	double min_distance;
 	string str_source;
-	map<string, string> answer;
-	vector<string> filename;
+	std::map<string, string> answer;
+	std::vector<string> filename;
 
 	dp_target = opendir(dir_target.c_str());
 
 	if( dp_target == NULL){
-		cout<<"Error opening "<<endl;
+		std::cout<<"Error opening "<<std::endl;
 		return 0;
 	}
 
@@ -77,18 +74,18 @@ int main()
 		if(strcmp(dirp_target->d_name, ".") == 0 || strcmp(dirp_target->d_name, "..") == 0 ){
 			continue;
 		}else{
-			cout<<"Start processing " <<++cnt<<" sub image ......"<<endl;
+			std::cout<<"Start processing " <<++cnt<<" sub image ......"<<std::endl;
 
-			//cout<<"target file is "<<fp_target<<endl;
+			//std::cout<<"target file is "<<fp_target<<std::endl;
 			Mat img_2 = imread( fp_target, CV_LOAD_IMAGE_GRAYSCALE );
 			if( !img_2.data ){
-				cout<<" --(!) Error reading images "<<endl;
+				std::cout<<" --(!) Error reading images "<<std::endl;
 				return -1;
 			}
 
 			dp_source = opendir(dir_source.c_str());
 			if( dp_source == NULL){
-				cout<<"Error opening "<<endl;
+				std::cout<<"Error opening "<<std::endl;
 				return 0;
 			}
 
@@ -101,11 +98,11 @@ int main()
 					if( std::find(filename.begin(), filename.end(), dirp_source->d_name) != filename.end() )
 						continue;
 
-					//cout<<"source file is "<<fp_source<<endl;
+					//std::cout<<"source file is "<<fp_source<<std::endl;
 					Mat img_1 = imread( fp_source.c_str(), CV_LOAD_IMAGE_GRAYSCALE );
 
 					if( !img_1.data ){
-						cout<<" --(!) Error reading images "<<endl;
+						std::cout<<" --(!) Error reading images "<<std::endl;
 						return -1;
 					}
 
@@ -142,8 +139,8 @@ int main()
 							max_dist = dist;
 					}
 
-					cout<<"-- Max dist : "<<max_dist<<endl;
-					cout<<"-- Min dist : "<<min_dist<<endl;
+					std::cout<<"-- Max dist : "<<max_dist<<std::endl;
+					std::cout<<"-- Min dist : "<<min_dist<<std::endl;
 
 					//-- Draw only "good" matches (i.e. whose distance is less than 2*min_dist,
 					//-- or a small arbitary value ( 0.02 ) in the event that min_dist is very
@@ -160,7 +157,7 @@ int main()
 					//Mat img_matches;
 					// drawMatches( img_1, keypoints_1, img_2, keypoints_2,
 					//         good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
-					//         vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
+					//         std::vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS );
 
 					//-- Show detected matches
 					//imshow( "Good Matches", img_matches );
@@ -182,29 +179,29 @@ int main()
 
 			filename.push_back(str_source);
 			string src_name, tar_name;
-			istringstream iss_tar(dirp_target->d_name);
+			std::istringstream iss_tar(dirp_target->d_name);
 			getline(iss_tar, tar_name, '.');
-			istringstream iss_src(str_source);
+			std::istringstream iss_src(str_source);
 			getline(iss_src, src_name, '.');
-			answer.insert(pair<string, string>(tar_name, src_name));
+			answer.insert(std::pair<std::string, std::string>(tar_name, src_name));
 		}
 	}
 
 	clock_gettime(CLOCK_MONOTONIC_RAW, &end);
 	uint64_t diff = (end.tv_sec-start.tv_sec)+end.tv_nsec-start.tv_nsec;
-	cout<<"Elapsed process CPU time = "<< diff <<" seconds "<<endl;
+	std::cout<<"Elapsed process CPU time = "<< diff <<" seconds "<<std::endl;
 
 	closedir(dp_source);
 	closedir(dp_target);
 
-	cout<<"{\"env\":\"dev\",\"answers\":{";
+	std::cout<<"{\"env\":\"dev\",\"answers\":{";
 	int size = answer.size()-1;
-	for(map<string, string>::iterator iter = answer.begin(); iter != answer.end(); iter++){
-		cout<<"\"" << iter->first<< "\"" <<":"<<iter->second;
+	for(std::map<std::string, std::string>::iterator iter = answer.begin(); iter != answer.end(); iter++){
+		std::cout<<"\"" << iter->first<< "\"" <<":"<<iter->second;
 		if(size != 0)
-			cout<<",";
+			std::cout<<",";
 		size--;
 	}
-	cout<<"}}"<<endl;
+	std::cout<<"}}"<<std::endl;
 }
 #endif
