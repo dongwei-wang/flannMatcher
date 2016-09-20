@@ -1,0 +1,32 @@
+# Author: Dongwei Wang
+# wdw828@gmail.com
+
+# This is the run file for sub image comparison solution
+# ADDRESS is the variable for different dataset
+# We should change the value of ADDRESS to right one if dataset is changed
+
+ADDRESS=falcon-hood
+
+# download the original xml file
+wget https://s3.amazonaws.com/elephant-ramhacks-$ADDRESS
+
+# create two directories
+# source is for original images
+# targets is for sub images
+mkdir source; mkdir targets
+
+# mf.py is written by python which is used to get the write url address for all original and sub images
+# mf.py creates two files:
+# src_list: includes all urls for original images
+# tar_list: includes all urls for sub images
+python mf.py elephant-ramhacks-$ADDRESS https://s3.amazonaws.com/elephant-ramhacks-$ADDRESS
+
+# delete the original xml file after we get all url addresses of original and sub images
+rm -f elephant-ramhacks-$ADDRESS
+
+# get into the directory to download images from urls
+cd source; wget -i src_list ; rm -f src_list ; cd ..
+cd targets; wget -i tar_list ; rm -f tar_list ; cd ..
+
+# main application to execute the image comparison
+./flannMatcher
