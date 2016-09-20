@@ -1,17 +1,13 @@
 #include "opencv2/opencv_modules.hpp"
 #include <stdio.h>
 #include <dirent.h>
-#include <string.h>
 #include <string>
 #include <iostream>
-
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <map>
 #include <time.h>
 
 #define MAX_DISTANCE 1
+#define MAX_DIR_LEN 1024
 
 #ifndef HAVE_OPENCV_NONFREE
 
@@ -31,21 +27,25 @@ int main(int, char**)
 using namespace cv;
 using namespace std;
 
-void readme();
-
 /**
  * @function main
  * @brief Main function
  */
-int main( int argc, char** argv )
+int main()
 {
-	if( argc != 1 ){
-		readme();
-		return -1;
-	}
+	char cwd[MAX_DIR_LEN];
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		cout<<"Current working directory is: "<<cwd<<endl;
+	else
+	    cout<<"Get directory failed!!!"<<endl;
 
-	string dir_source("/home/wangd7/Desktop/flannMatcher/targets");
-	string dir_target("/home/wangd7/Desktop/flannMatcher/source");
+	string dir_cur(cwd);
+	string dir_source = dir_cur + "/source";
+	string dir_target = dir_cur + "/targets";
+
+	// cout<<"source directory: "<<dir_source<<endl;
+	// cout<<"target directory: "<<dir_target<<endl;
+
 	string fp_source, fp_target;
 	DIR *dp_source, *dp_target;
 	struct dirent *dirp_source, *dirp_target;
@@ -208,12 +208,4 @@ int main( int argc, char** argv )
 	}
 	cout<<"}}"<<endl;
 }
-
-/**
- * @function readme
- */
-void readme(){
-	cout<<" Usage: ./SURF_FlannMatcher <img1> <img2>"<<endl;
-}
 #endif
-
