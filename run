@@ -5,30 +5,30 @@
 # ADDRESS is the variable for different dataset
 # We should change the value of ADDRESS to right one if dataset is changed
 
-ADDRESS=falcon-hood
+#ADDRESS=falcon-hood
 
 # download the original xml file
-wget https://s3.amazonaws.com/elephant-ramhacks-$ADDRESS
+#wget https://s3.amazonaws.com/elephant-ramhacks-$ADDRESS
 
 # create two directories
 # source is for original images
 # targets is for sub images
-mkdir source; mkdir targets
+#mkdir source; mkdir targets
 
 # mf.py is written by python which is used to get the write url address for all original and sub images
 # mf.py creates two files:
 # src_list: includes all urls for original images
 # tar_list: includes all urls for sub images
-python mf.py elephant-ramhacks-$ADDRESS https://s3.amazonaws.com/elephant-ramhacks-$ADDRESS
+#python mf.py elephant-ramhacks-$ADDRESS https://s3.amazonaws.com/elephant-ramhacks-$ADDRESS
 
 # delete the original xml file after we get all url addresses of original and sub images
-rm -f elephant-ramhacks-$ADDRESS
+#rm -f elephant-ramhacks-$ADDRESS
 
 # get into the directory to download images from urls
 # -nc: no duplicated download if the images are already in directory
 # -i: download iamges form file
-cd source; wget -nc -i src_list ; rm -f src_list ; cd ..
-cd targets; wget -nc -i tar_list ; rm -f tar_list ; cd ..
+#cd source; wget -nc -i src_list ; rm -f src_list ; cd ..
+#cd targets; wget -nc -i tar_list ; rm -f tar_list ; cd ..
 
 # main application to execute the image comparison
 ./flannMatcher
